@@ -63,7 +63,7 @@ $(document).ready(function() {
                 data: $(form).serialize(),
                 success: function(response) {
                     if (response.status) {
-                        $('#myModal').modal('hide');
+                        $('#modal-master').modal('hide'); // Ganti '#myModal' dengan '#modal-master'
                         Swal.fire({
                             icon: 'success',
                             title: 'Berhasil',
@@ -71,19 +71,22 @@ $(document).ready(function() {
                         });
                         datalevel.ajax.reload();
                     } else {
-                        $('.error-text').text('');
-                        $.each(response.msgField, function(prefix, val) {
-                            $('#error-' + prefix).text(val[0]);
-                        });
                         Swal.fire({
                             icon: 'error',
                             title: 'Terjadi Kesalahan',
                             text: response.message
                         });
                     }
+                },
+                error: function(xhr) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Ajax Error',
+                        text: 'Terjadi kesalahan pada proses penghapusan data.'
+                    });
                 }
             });
-            return false;
+            return false; // Menghindari form submission default
         },
         errorElement: 'span',
         errorPlacement: function(error, element) {
