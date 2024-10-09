@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\BarangController;
+use App\Http\Controllers\AuthController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -110,4 +111,11 @@ Route::group(['prefix' => 'barang'], function () {
     Route::post('/{id}', [BarangController::class, 'destroy']);
     Route::get('/{id}/delete_ajax', [BarangController::class, 'confirm_ajax']); // Untuk menampilkan form confirm delete Barang Ajax
     Route::delete('/{id}/delete_ajax', [BarangController::class, 'delete_ajax']); // Untuk menghapus data Barang Ajax
+});
+Route::pattern('id', '[8-9]+'); // artinya ketika ada parameter (id), maka harus berupa angka
+Route::get('login', [AuthController::class, 'login'])->name('login');
+Route::post('login', [AuthController::class, 'postlogin']);
+Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
+Route::middleware(['auth'])->group(function() { // artinya semua route di dalam group ini harus login dulu
+    // masukkan semua route yang perlu autentikasi di sini
 });
