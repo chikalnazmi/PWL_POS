@@ -37,13 +37,15 @@ Route::pattern('id', '[0-9]+');
 
 Route::get('login', [AuthController::class, 'login'])->name('login');
 Route::post('login', [AuthController::class, 'postLogin']);
+Route::get('register', [AuthController::class, 'register']);
+Route::post('register', [AuthController::class, 'postregister']);
 Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
 
 
 Route::middleware(['auth'])->group(function() {
     Route::get('/', [WelcomeController::class, 'index']);
 
-    Route::middleware(['authorize:ADM'])->group(function(){
+    Route::middleware(['authorize:ADM,MNG'])->group(function(){
         Route::group(['prefix' => 'level'], function () {
             Route::get('/', [LevelController::class, 'index']);
             Route::post('/list', [LevelController::class, 'list']);
