@@ -64,7 +64,6 @@
         </div>
     </div>
 </form>
-
 <script>
 $(document).ready(function() {
     $("#formedit").validate({

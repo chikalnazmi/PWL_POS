@@ -1,4 +1,4 @@
-
+user_ajax.blade.php
 <form action="{{ url('/user/ajax') }}" method="POST" id="form-tambah">
     @csrf
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
@@ -20,26 +20,22 @@
                     </select>
                     <small id="error-level_id" class="error-text form-text text-danger"></small>
                 </div>
-
                 <div class="form-group">
                     <label>Username</label>
                     <input type="text" name="username" id="username" class="form-control" required>
                     <small id="error-username" class="error-text form-text text-danger"></small>
                 </div>
-
                 <div class="form-group">
                     <label>Nama</label>
                     <input type="text" name="nama" id="nama" class="form-control" required>
                     <small id="error-nama" class="error-text form-text text-danger"></small>
                 </div>
-
                 <div class="form-group">
                     <label>Password</label>
                     <input type="password" name="password" id="password" class="form-control" required>
                     <small id="error-password" class="error-text form-text text-danger"></small>
                 </div>
             </div> 
-
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
                 <button type="submit" class="btn btn-primary">Simpan</button>
@@ -47,10 +43,9 @@
         </div>
     </div>
 </form>
-
 <script>
 $(document).ready(function () {
-    $('#formAdd').validate({
+    $('#form-tambah').validate({
         rules: {
             name: {
                 required: true
@@ -97,7 +92,6 @@ $(document).ready(function () {
                 success: function (response) {
                     // Tambahkan log untuk memastikan respon diterima
                     console.log('Response received:', response);
-
                     if (response.success) {
                         // Jika berhasil, bisa lakukan sesuatu
                         alert("Data berhasil disimpan!");
@@ -116,5 +110,4 @@ $(document).ready(function () {
         }
     });
 });
-
 </script>

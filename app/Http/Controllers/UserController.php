@@ -33,19 +33,18 @@ class UserController extends Controller
             'activeMenu' => $activeMenu]);
     }
 
-    // Ambil data user dalam bentuk JSON untuk DataTables
     public function list(Request $request)
     {
         $users = UserModel::select('user_id', 'username', 'nama', 'level_id')
             ->with('level');
-        
+
         // Filter data user berdasarkan level_id
         if ($request->level_id) {
             $users->where('level_id', $request->level_id);
         }
-        
+
         return DataTables::of($users)
-            ->addIndexColumn() // Menambahkan kolom index / no urut (default nama kolom: DT_RowIndex)
+        ->addIndexColumn() // Menambahkan kolom index / no urut (default nama kolom: DT_RowIndex)
             ->addColumn('aksi', function ($user) { // Menambahkan kolom aksi
                 $btn = '<button onclick="modalAction(\''.url('/user/' . $user->user_id . '/show_ajax').'\')" class="btn btn-info btn-sm">Detail</button> ';
                 $btn .= '<button onclick="modalAction(\''.url('/user/' . $user->user_id . '/edit_ajax').'\')" class="btn btn-warning btn-sm">Edit</button> ';
@@ -56,7 +55,6 @@ class UserController extends Controller
             ->make(true);
     }
 
-  
     public function create()
     {
         $breadcrumb = (object) [
@@ -102,7 +100,7 @@ class UserController extends Controller
         ]);
         return redirect('/user')->with('success', 'Data user berhasil disimpan');
     }
-    
+
     public function show(string $id)
     {
         $user = UserModel::with('level')->find($id);
@@ -166,6 +164,7 @@ class UserController extends Controller
 
         return redirect('/user')->with('success', 'Data user berhasil diubah');
     }
+
     // Menghapus data user
     public function destroy(string $id)
     {
@@ -189,11 +188,9 @@ class UserController extends Controller
     public function create_ajax()
     {
         $level = LevelModel::select('level_id', 'level_nama')->get();
-
         return view('user.create_ajax')
             ->with('level', $level);
     }
-
     public function store_ajax(Request $request) {
         // cek apakah request berupa ajax
         if($request->ajax() || $request->wantsJson()){
@@ -224,15 +221,12 @@ class UserController extends Controller
     
         redirect('/');
     }
-
     // Menampilkan halaman form edit user ajax
     public function edit_ajax(string $id) {
         $user = UserModel::find($id);
         $level = LevelModel::select('level_id', 'level_nama')->get();
-
         return view('user.edit_ajax', ['user' => $user, 'level' => $level]);
     }
-
     public function update_ajax(Request $request, $id)
     {
         // Cek apakah request dari AJAX
@@ -243,10 +237,8 @@ class UserController extends Controller
                 'nama' => 'required|max:100',
                 'password' => 'nullable|min:6|max:20'
             ];
-
             // Gunakan Illuminate\Support\Facades\Validator
             $validator = Validator::make($request->all(), $rules);
-
             if ($validator->fails()) {
                 return response()->json([
                     'status' => false, // Respon JSON, true: berhasil, false: gagal
@@ -254,7 +246,6 @@ class UserController extends Controller
                     'msgField' => $validator->errors() // Menunjukkan field mana yang error
                 ]);
             }
-
             $check = UserModel::find($id);
             if ($check) {
                 if (!$request->filled('password')) { // Jika password tidak diisi, maka hapus dari request
@@ -275,6 +266,7 @@ class UserController extends Controller
         
         return redirect('/');
     }
+
     public function confirm_ajax(string $id) {
         $user = UserModel::find($id);
     

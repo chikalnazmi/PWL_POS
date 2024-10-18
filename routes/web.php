@@ -126,6 +126,8 @@ Route::middleware(['auth'])->group(function() {
         Route::post('/{id}', [BarangController::class, 'destroy']);
         Route::get('/{id}/delete_ajax', [BarangController::class, 'confirm_ajax']); // Untuk menampilkan form confirm delete Barang Ajax
         Route::delete('/{id}/delete_ajax', [BarangController::class, 'delete_ajax']); // Untuk menghapus data Barang Ajax
+        Route::get('/import', [BarangController::class, 'import']); 
+        Route::post('/import_ajax', [BarangController::class, 'import_ajax']);
     });
     
 });
