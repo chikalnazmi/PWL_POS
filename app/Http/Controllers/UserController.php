@@ -37,7 +37,7 @@ class UserController extends Controller
 
     public function list(Request $request)
     {
-        $users = UserModel::select('user_id', 'username', 'nama', 'level_id')
+        $users = UserModel::select('user_id', 'username', 'nama', 'user_profile', 'level_id')
             ->with('level');
 
         // Filter data user berdasarkan level_id
@@ -91,35 +91,54 @@ class UserController extends Controller
             'password' => 'required|min:5',
 
             // level_id harus diisi dan berupa angka
-            'level_id' => 'required|integer'
+            'level_id' => 'required|integer',
+
+            'user_profile' => 'text'
         ]);
 
         UserModel::create([
             'username' => $request->username,
             'nama' => $request->nama,
             'password' => bcrypt($request->password), // password dienkripsi sebelum disimpan
-            'level_id' => $request->level_id
+            'level_id' => $request->level_id,
+            'user_profile' => $request->user_profile
         ]);
         return redirect('/user')->with('success', 'Data user berhasil disimpan');
+        
     }
 
     public function show(string $id)
     {
+        // Cari user dengan relasi 'level'
         $user = UserModel::with('level')->find($id);
 
+        // Jika data user tidak ditemukan, redirect dengan pesan error
+        if (!$user) {
+            return redirect()->back()->withErrors('Data user tidak ditemukan.');
+        }
+
+        // Definisi breadcrumb
         $breadcrumb = (object) [
             'title' => 'Detail User',
             'list' => ['Home', 'User', 'Detail']
         ];
 
+        // Definisi halaman
         $page = (object) [
-            'title' => 'Detail user'
+            'title' => 'Detail User'
         ];
 
         $activeMenu = 'user'; // set menu yang sedang aktif
 
-        return view('user.show', ['breadcrumb' => $breadcrumb, 'page' => $page, 'user' => $user, 'activeMenu' => $activeMenu]);
+        // Return view dengan data yang dibutuhkan
+        return view('user.show', [
+            'breadcrumb' => $breadcrumb,
+            'page' => $page,
+            'user' => $user,
+            'activeMenu' => $activeMenu
+        ]);
     }
+
 
     // Menampilkan halaman form edit user
     public function edit(string $id)
@@ -154,14 +173,16 @@ class UserController extends Controller
 
             'password' => 'nullable|min:5', // password bisa diisi (minimal 5 karakter) dan bisa tidak diisi
 
-            'level_id' => 'required|integer' // level_id harus diisi dan berupa angka
+            'level_id' => 'required|integer', // level_id harus diisi dan berupa angka
+            'user_profile' => 'nullable|text'
         ]);
 
         UserModel::find($id)->update([
             'username' => $request->username,
             'nama' => $request->nama,
             'password' => $request->password ? bcrypt($request->password) : UserModel::find($id)->password,
-            'level_id' => $request->level_id
+            'level_id' => $request->level_id,
+            'user_profile' => $request->user_profile
         ]);
 
         return redirect('/user')->with('success', 'Data user berhasil diubah');
@@ -193,81 +214,83 @@ class UserController extends Controller
         return view('user.create_ajax')
             ->with('level', $level);
     }
-    public function store_ajax(Request $request) {
-        // cek apakah request berupa ajax
-        if($request->ajax() || $request->wantsJson()){
-            $rules = [
-                'level_id' => 'required|integer',
-                'username' => 'required|string|min:3|unique:m_user,username',
-                'nama' => 'required|string|max:100',
-                'password' => 'required|min:6'
-            ];
-    
-            // use Illuminate\Support\Facades\Validator;
-            $validator = Validator::make($request->all(), $rules);
-    
-            if($validator->fails()){
-                return response()->json([
-                    'status' => false, // response status, false: error/gagal, true: berhasil
-                    'message' => 'Validasi Gagal',
-                    'msgField' => $validator->errors(), // pesan error validasi
-                ]);
-            }
-    
-            UserModel::create($request->all());
-            return response()->json([
-                'status' => true,
-                'message' => 'Data user berhasil disimpan'
-            ]);
+    public function store_ajax(Request $request) 
+    {
+        // Validasi input data
+        $request->validate([
+            'username' => 'required|string|min:3|unique:m_user,username',
+            'nama' => 'required|string|max:100',
+            'password' => 'required|min:6',
+            'level_id' => 'required|integer',
+            'user_profile' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048' // validasi file gambar
+        ]);
+
+        // Siapkan data user yang akan disimpan
+        $userData = [
+            'username' => $request->username,
+            'nama' => $request->nama,
+            'password' => bcrypt($request->password), // enkripsi password sebelum disimpan
+            'level_id' => $request->level_id,
+        ];
+
+        // Jika ada file gambar user_profile yang diupload
+        if ($request->hasFile('user_profile')) {
+            $file = $request->file('user_profile');
+            $fileName = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/profile_pics'), $fileName);
+            $userData['user_profile'] = $fileName; // Simpan nama file di database
         }
-    
-        redirect('/');
+
+        // Simpan data user ke database
+        UserModel::create($userData);
+
+        return response()->json(['success' => 'Data user berhasil disimpan']);
     }
+
     // Menampilkan halaman form edit user ajax
     public function edit_ajax(string $id) {
         $user = UserModel::find($id);
         $level = LevelModel::select('level_id', 'level_nama')->get();
         return view('user.edit_ajax', ['user' => $user, 'level' => $level]);
     }
-    public function update_ajax(Request $request, $id)
+    public function update_ajax(Request $request)
     {
-        // Cek apakah request dari AJAX
-        if ($request->ajax() || $request->wantsJson()) {
-            $rules = [
-                'level_id' => 'required|integer',
-                'username' => 'required|max:20|unique:m_user,username,' . $id . ',user_id',
-                'nama' => 'required|max:100',
-                'password' => 'nullable|min:6|max:20'
-            ];
-            // Gunakan Illuminate\Support\Facades\Validator
-            $validator = Validator::make($request->all(), $rules);
-            if ($validator->fails()) {
-                return response()->json([
-                    'status' => false, // Respon JSON, true: berhasil, false: gagal
-                    'message' => 'Validasi gagal.',
-                    'msgField' => $validator->errors() // Menunjukkan field mana yang error
-                ]);
+        $request->validate([
+            'username' => 'required|string|min:3|unique:m_user,username,' . $request->id . ',user_id',
+            'nama' => 'required|string|max:100',
+            'password' => 'nullable|min:5',
+            'level_id' => 'required|integer',
+            'user_profile' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048' // validasi file gambar
+        ]);
+
+        $user = UserModel::find($request->id);
+        $userData = [
+            'username' => $request->username,
+            'nama' => $request->nama,
+            'password' => $request->password ? bcrypt($request->password) : $user->password,
+            'level_id' => $request->level_id,
+        ];
+
+        // Jika ada file user_profile yang diupload
+        if ($request->hasFile('user_profile')) {
+            $file = $request->file('user_profile');
+            $fileName = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/profile_pics'), $fileName);
+
+            // Hapus foto profil lama jika ada
+            if ($user->user_profile) {
+                unlink(public_path('uploads/profile_pics/' . $user->user_profile));
             }
-            $check = UserModel::find($id);
-            if ($check) {
-                if (!$request->filled('password')) { // Jika password tidak diisi, maka hapus dari request
-                    $request->request->remove('password');
-                }
-                $check->update($request->all());
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Data berhasil diupdate'
-                ]);
-            } else {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Data tidak ditemukan'
-                ]);
-            }
+
+            $userData['user_profile'] = $fileName;
         }
-        
-        return redirect('/');
+
+        $user->update($userData);
+
+        return response()->json(['success' => 'Data user berhasil diubah']);
     }
+
+    
 
     public function confirm_ajax(string $id) {
         $user = UserModel::find($id);

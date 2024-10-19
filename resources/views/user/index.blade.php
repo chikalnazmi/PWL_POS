@@ -42,6 +42,7 @@
                     <th>Username</th>
                     <th>Nama</th>
                     <th>Level</th>
+                    <th>Foto Profil</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -111,6 +112,11 @@
             className: "",
             orderable: false,
             searchable: false
+        },{
+            data: "user_profile",
+            className: "",
+            orderable: true,
+            searchable: true 
         }, {
             data: "aksi",
             className: "",

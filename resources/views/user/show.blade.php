@@ -7,7 +7,7 @@
     </div>
 
     <div class="card-body">
-        @empty($user)
+        @if (empty($user))
             <div class="alert alert-danger alert-dismissible">
                 <h5><i class="icon fas fa-ban"></i> Kesalahan!</h5>
                 Data yang Anda cari tidak ditemukan.
@@ -20,7 +20,7 @@
                 </tr>
                 <tr>
                     <th>Level</th>
-                    <td>{{ $user->level->level_nama }}</td>
+                    <td>{{ $user->level ? $user->level->level_nama : '-' }}</td> <!-- Tambahkan pengecekan apakah relasi level ada -->
                 </tr>
                 <tr>
                     <th>Username</th>
@@ -31,11 +31,21 @@
                     <td>{{ $user->nama }}</td>
                 </tr>
                 <tr>
+                    <th>Foto Profil</th>
+                    <td>
+                        @if ($user->user_profile)
+                            <img src="{{ asset('uploads/'.$user->user_profile) }}" alt="Profile Picture" class="img-thumbnail" width="100">
+                        @else
+                            Tidak ada foto profil
+                        @endif
+                    </td>
+                </tr>
+                <tr>
                     <th>Password</th>
-                    <td>********</td>
+                    <td>********</td> <!-- Tidak menampilkan password asli -->
                 </tr>
             </table>
-        @endempty
+        @endif
 
         <a href="{{ url('user') }}" class="btn btn-sm btn-default mt-2">Kembali</a>
     </div>

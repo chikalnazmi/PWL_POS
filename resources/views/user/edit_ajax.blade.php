@@ -51,6 +51,10 @@
                     <small id="error-nama" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
+                    <label for="user_profile">Foto Profil</label>
+                    <input type="file" class="form-control" id="user_profile" name="user_profile">
+                </div>
+                <div class="form-group">
                     <label>Password</label>
                     <input type="password" name="password" id="password" class="form-control">
                     <small class="form-text text-muted">Abaikan jika tidak ingin ubah password</small>
@@ -71,6 +75,7 @@ $(document).ready(function() {
             level_id: { required: true, number: true },
             username: { required: true, minlength: 3, maxlength: 20 },
             nama: { required: true, minlength: 3, maxlength: 100 },
+            user_profile: { image: true }
             password: { minlength: 6, maxlength: 20 }
         },
         submitHandler: function(form) {

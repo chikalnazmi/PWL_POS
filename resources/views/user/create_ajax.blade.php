@@ -31,10 +31,15 @@ user_ajax.blade.php
                     <small id="error-nama" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
+                    <label for="user_profile">Foto Profil</label>
+                    <input type="file" class="form-control" id="user_profile" name="user_profile">
+                </div>
+                <div class="form-group">
                     <label>Password</label>
                     <input type="password" name="password" id="password" class="form-control" required>
                     <small id="error-password" class="error-text form-text text-danger"></small>
                 </div>
+                
             </div> 
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
