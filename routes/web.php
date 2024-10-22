@@ -8,7 +8,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\BarangController;
+use App\Http\Controllers\StokController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LandingPageController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -33,6 +35,7 @@ use App\Http\Controllers\AuthController;
 // Route::get('/user/hapus/{id}',[UserController::class,'hapus']);
 // Route::get('/',[WelcomeController::class,'index']);
 
+Route::get('/landing', [LandingPageController::class, 'index']);
 Route::pattern('id', '[0-9]+');
 
 Route::get('login', [AuthController::class, 'login'])->name('login');
@@ -50,6 +53,7 @@ Route::middleware(['auth'])->group(function() {
             Route::get('/', [LevelController::class, 'index']);
             Route::post('/list', [LevelController::class, 'list']);
             Route::get('/create', [LevelController::class, 'create']);
+            Route::get('/{id}/show_ajax', [LevelController::class, 'show_ajax']);
             Route::post('/', [LevelController::class, 'store']);
             Route::get('/create_ajax', [LevelController::class, 'create_ajax']);
             Route::post('/ajax', [LevelController::class, 'store_ajax']);
@@ -74,6 +78,7 @@ Route::middleware(['auth'])->group(function() {
         Route::get('/create_ajax', [UserController::class, 'create_ajax']);
         Route::post('/ajax', [UserController::class, 'store_ajax']);
         Route::get('/{id}', [UserController::class, 'show']);
+        Route::get('/{id}/show_ajax', [UserController::class, 'show_ajax']);
         Route::get('/{id}/edit', [UserController::class, 'edit']);
         Route::put('/{id}', [UserController::class, 'update']);
         Route::get('/{id}/edit_ajax', [UserController::class, 'edit_ajax']); // Menampilkan halaman form edit user Ajax
@@ -93,6 +98,7 @@ Route::middleware(['auth'])->group(function() {
         Route::get('/', [KategoriController::class, 'index']);
         Route::post('/list', [KategoriController::class, 'list']);
         Route::get('/create', [KategoriController::class, 'create']);
+        Route::get('/{id}/show_ajax', [KategoriController::class, 'show_ajax']);
         Route::post('/', [KategoriController::class, 'store']);
         Route::get('/create_ajax', [KategoriController::class, 'create_ajax']);
         Route::post('/ajax', [KategoriController::class, 'store_ajax']);
@@ -112,6 +118,7 @@ Route::middleware(['auth'])->group(function() {
         Route::get('/', [SupplierController::class, 'index']);
         Route::post('/list', [SupplierController::class, 'list']);
         Route::get('/create', [SupplierController::class, 'create']);
+        Route::get('/{id}/show_ajax', [SupplierController::class, 'show_ajax']);
         Route::post('/', [SupplierController::class, 'store']);
         Route::get('/create_ajax', [SupplierController::class, 'create_ajax']);
         Route::post('/ajax', [SupplierController::class, 'store_ajax']);
@@ -135,6 +142,7 @@ Route::middleware(['auth'])->group(function() {
         Route::get('/create_ajax', [BarangController::class, 'create_ajax']);
         Route::post('/ajax', [BarangController::class, 'store_ajax']);
         Route::get('/{id}', [BarangController::class, 'show']);
+        Route::get('/{id}/show_ajax', [BarangController::class, 'show_ajax']);
         Route::get('/{id}/edit', [BarangController::class, 'edit']);
         Route::put('/{id}', [BarangController::class, 'update']);
         Route::get('/{id}/edit_ajax', [BarangController::class, 'edit_ajax']); // Menampilkan halaman form edit Barang Ajax
@@ -144,6 +152,27 @@ Route::middleware(['auth'])->group(function() {
         Route::delete('/{id}/delete_ajax', [BarangController::class, 'delete_ajax']); // Untuk menghapus data Barang Ajax
         Route::get('/import', [BarangController::class, 'import']); 
         Route::post('/import_ajax', [BarangController::class, 'import_ajax']);
+        Route::get('/export_excel', [BarangController::class, 'export_excel']);
+        Route::get('/export_pdf', [BarangController::class, 'export_pdf']);
+    });
+    Route::group(['prefix' => 'stok'], function () {
+        Route::get('/', [StokController::class, 'index']);
+        Route::post('/list', [StokController::class, 'list']);
+        Route::get('/create', [StokController::class, 'create']);
+        Route::post('/', [StokController::class, 'store']);
+        Route::get('/create_ajax', [StokController::class, 'create_ajax']);
+        Route::post('/ajax', [StokController::class, 'store_ajax']);
+        Route::get('/{id}', [StokController::class, 'show']);
+        Route::get('/{id}/show_ajax', [StokController::class, 'show_ajax']);
+        Route::get('/{id}/edit', [StokController::class, 'edit']);
+        Route::put('/{id}', [StokController::class, 'update']);
+        Route::get('/{id}/edit_ajax', [StokController::class, 'edit_ajax']); // Menampilkan halaman form edit Stok Ajax
+        Route::put('/{id}/update_ajax', [StokController::class, 'update_ajax']); // Menyimpan perubahan data Stok Ajax
+        Route::post('/{id}', [StokController::class, 'destroy']);
+        Route::get('/{id}/delete_ajax', [StokController::class, 'confirm_ajax']); // Untuk menampilkan form confirm delete Stok Ajax
+        Route::delete('/{id}/delete_ajax', [StokController::class, 'delete_ajax']); // Untuk menghapus data Stok Ajax
+        Route::get('/import', [StokController::class, 'import']); 
+        Route::post('/import_ajax', [StokController::class, 'import_ajax']);
         Route::get('/export_excel', [BarangController::class, 'export_excel']);
         Route::get('/export_pdf', [BarangController::class, 'export_pdf']);
     });

@@ -37,7 +37,7 @@ class SupplierController extends Controller
         return DataTables::of($supplier)
         ->addIndexColumn() // Menambahkan kolom index
         ->addColumn('aksi', function ($supplier) {
-            $btn = '';
+            $btn = '<button onclick="modalAction(\''.url('/barang/' . $supplier->supplier_id. '/show_ajax').'\')" class="btn btn-info btn-sm">Detail</button> ';
             $btn .= '<button onclick="modalAction(\'' . url('/supplier/' . $supplier->supplier_id . '/edit_ajax') . '\')" class="btn btn-warning btn-sm">Edit</button> ';
                 $btn .= '<button onclick="modalAction(\'' . url('/supplier/' . $supplier->supplier_id . '/delete_ajax') . '\')" class="btn btn-danger btn-sm">Hapus</button> ';
             return $btn;
