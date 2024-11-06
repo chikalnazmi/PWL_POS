@@ -263,6 +263,7 @@ class UserController extends Controller
     {
         // cek apakah request dari ajax
         if ($request->ajax() || $request->wantsJson()) {
+
             $rules = [
                 'level_id' => 'required|integer',
                 'username' => 'required|max:20|unique:m_user,username,' . $id . ',user_id',
@@ -284,18 +285,22 @@ class UserController extends Controller
                 if (!$request->filled('password')) { // jika password tidak diisi, maka hapus dari request
                     $request->request->remove('password');
                 }
-                if ($request->has('user_profile')) {
+                if ($request->hasFile('user_profile')) {
                     $file = $request->file('user_profile');
                     $extension = $file->getClientOriginalExtension();
 
                     $filename = time() . '.' . $extension;
 
-                    $path = 'image/profile/';
+                    $path = public_path('image/profile/');
                     $file->move($path, $filename);
+                    $check->user_profile = $path . $filename;
                 }
                 // $fileName = time() . $request->file('user_profile')->getClientOriginalExtension();
-                // $path = $request->file('user_profile')->storeAs('images', $fileName);
+                
+                // $path = $request->file(key: 'user_profile')->storeAs('image/', $fileName);
                 // $request['user_profile'] = '/storage/' . $path;
+
+                // $pathFile = ;
 
                 if (!$request->filled('user_profile')) { // jika password tidak diisi, maka hapus dari request 
                     $request->request->remove('user_profile');
@@ -305,8 +310,8 @@ class UserController extends Controller
                     'username'  => $request->username,
                     'nama'      => $request->nama,
                     'password'  => $request->password ? bcrypt($request->password) : UserModel::find($id)->password,
-                    'level_id'  => $request->level_id,
-                    'user_profile'      => $path.$filename
+                    'level_id'  => $request->level_id
+                    // 'user_profile' => $path . $filename
                 ]);
                 return response()->json([
                     'status' => true,

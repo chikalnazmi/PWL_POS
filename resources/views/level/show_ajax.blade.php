@@ -19,7 +19,7 @@
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Detail Data level</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Detail Data Kategori</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
             </div>
@@ -30,11 +30,11 @@
                         <td class="col-9">{{ $level->level_id }}</td>
                     </tr>
                     <tr>
-                        <th class="text-right col-3">level Kode </th>
+                        <th class="text-right col-3">Kategori Kode </th>
                         <td class="col-9">{{ $level->level_kode }}</td>
                     </tr>
                     <tr>
-                        <th class="text-right col-3">level Nama</th>
+                        <th class="text-right col-3">Kategori Nama</th>
                         <td class="col-9">{{ $level->level_nama }}</td>
                     </tr>
                     </table>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brand Accessories</title>
+    <title>Flower Blooms Accessories</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
@@ -11,6 +11,7 @@
         body {
             font-family: 'Poppins', sans-serif;
             overflow-x: hidden;
+            background-color: #f7f7f7;
         }
 
         /* Navbar */
@@ -23,7 +24,7 @@
         }
 
         .navbar.scrolled {
-            background-color: #9cad8c; /* Sage Green */
+            background-color: #7e8c69; /* Sage Green */
         }
 
         .navbar .nav-link {
@@ -39,8 +40,7 @@
 
         /* Hero Section */
         .hero {
-        
-            background-image: url('/images/hero-banner.jpg');
+            background-image: url('dist/img/hero_banner.jpg');
             background-size: cover;
             background-position: center;
             height: 100vh;
@@ -68,18 +68,18 @@
         }
 
         .hero h1 {
-            font-size: 56px;
+            font-size: 50px;
             margin-bottom: 20px;
             letter-spacing: 3px;
         }
 
         .hero p {
-            font-size: 20px;
+            font-size: 22px;
             margin-bottom: 40px;
         }
 
         .btn-custom {
-            background-color: #eab0bb; /* Baby Pink */
+            background-color: #cb8587; /* Soft Pink */
             color: white;
             padding: 15px 30px;
             border-radius: 30px;
@@ -89,18 +89,47 @@
         }
 
         .btn-custom:hover {
-            background-color: #dba2a7;
+            background-color: #b67678;
+        }
+
+        /* About Us Section */
+        .about-us {
+            padding: 100px 0;
+            background-color: #f7f7f7;
+        }
+
+        .about-us h2 {
+            font-size: 42px;
+            color: #7e8c69; /* Sage Green */
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .about-us p {
+            font-size: 20px;
+            color: #333;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .about-us img {
+            border-radius: 10px;
+            max-width: 80%;
+            display: block;
+            margin: 0 auto;
         }
 
         /* Gallery Section */
         .gallery {
             padding: 80px 0;
+            background-color: white;
         }
 
         .gallery h2 {
             font-size: 36px;
             margin-bottom: 40px;
             text-align: center;
+            color: #7e8c69; /* Sage Green */
         }
 
         /* Carousel */
@@ -112,7 +141,7 @@
 
         /* Footer */
         .footer {
-            background-color: #B7C4B1; /* Sage Green */
+            background-color: #7e8c69; /* Sage Green */
             padding: 30px;
             text-align: center;
             color: white;
@@ -136,30 +165,34 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
-            <a class="navbar-brand" href="#">Fresh Blooms</a>
+            <a class="navbar-brand" href="#">Flower Blooms</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
-                </ul>
-            </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
-            <h1>Discover Your Perfect Style</h1>
-            <p>Exclusive Accessories that Define You</p>
-            <a href="{{ route('login') }}" class="btn-custom">Login</a>
+            <h1>Flower Blooms</h1>
+            <p>Aksesori lucu dan elegan untuk mempercantik hari-harimu</p>
+            <a href="{{ route('login') }}" class="btn-custom">Masuk</a>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section class="about-us">
+        <div class="container">
+            <h2>Tentang Flower Blooms</h2>
+            <p>Flower Blooms adalah toko aksesori yang menghadirkan pernak-pernik elegan dan cantik untuk mempercantik harimu. Kami tidak menjual pakaian, tetapi fokus pada berbagai aksesori yang dibuat dengan penuh perhatian dan detail. Setiap produk kami dirancang untuk menambah keindahan dan kebahagiaan dalam setiap penampilanmu, sehingga memberikan sentuhan akhir yang sempurna untuk gaya harianmu.</p>
+            <img src="image/store_story.jpg" alt="Our Story" class="img-fluid">
         </div>
     </section>
 
     <!-- Gallery Section with Slider -->
     <section class="gallery">
-        <h2>Our Collection</h2>
+        <h2>Koleksi Kami</h2>
         <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-indicators">
                 <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -168,15 +201,16 @@
             </div>
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img src="dist/img/prod-1.jpg" class="d-block w-100" alt="Gallery Image 1">
+                    <img src="image/produk-4.jpg" class="d-block w-50 mx-auto" alt="Gallery Image 1">
                 </div>
                 <div class="carousel-item">
-                    <img src="public/dist/img/prod-2.jpg" class="d-block w-100" alt="Gallery Image 2">
+                    <img src="image/produk-2.jpg" class="d-block w-50 mx-auto" alt="Gallery Image 2">
                 </div>
                 <div class="carousel-item">
-                    <img src="public/dist/img/prod-3.jpg" class="d-block w-100" alt="Gallery Image 3">
+                    <img src="image/produk-3.jpg" class="d-block w-50 mx-auto" alt="Gallery Image 3">
                 </div>
             </div>
+
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
@@ -190,7 +224,7 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <p>&copy; 2024 Brand Accessories. All Rights Reserved.</p>
+        <p>&copy; 2024 Flower Blooms. Created by: Chikal Nazmi Mahira.</p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
