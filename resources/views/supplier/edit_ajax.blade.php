@@ -73,6 +73,8 @@
                 }
                     },
                     submitHandler: function(form) {
+
+                    
                         $.ajax({
                             url: form.action,
                             type: form.method,

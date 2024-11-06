@@ -17,15 +17,80 @@ ack">
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('adminlte/dist/css/adminlte.min.css') }}">
+    <style>
+        body {
+            background-image: url('/image/login-background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+            background-color: rgba(183, 196, 177, 0.7); /* Sage green overlay */
+            font-family: 'Source Sans Pro', sans-serif;
+        }
+
+        .login-box {
+            margin-top: 100px;
+        }
+
+        .card {
+            border-radius: 15px;
+        }
+
+        .card-header {
+            background-color: #9cad8c; /* Sage Green */
+            color: white;
+        }
+
+        .card-header a {
+            color: white;
+            font-weight: bold;
+        }
+
+        .card-body {
+            background-color: #eab0bb; /* Baby Pink */
+        }
+
+        .btn-primary {
+            background-color: #9cad8c; /* Sage Green */
+            border-color: #9cad8c; /* Sage Green */
+        }
+
+        .btn-primary:hover {
+            background-color: #9ca89a;
+            border-color: #9ca89a;
+        }
+
+        .login-box-msg {
+            color: #555;
+        }
+
+        .input-group-text {
+            background-color: #9cad8c; /* Sage Green */
+            border-color: #9cad8c;
+            color: white;
+        }
+
+        .icheck-primary input:checked+input {
+            background-color: #9cad8c;
+        }
+
+        .error-text {
+            font-size: 12px;
+        }
+
+        /* Custom error highlight */
+        .is-invalid {
+            border-color: #ff6666 !important;
+        }
+    </style>
 </head>
 
 <body class="hold-transition login-page">
     <div class="login-box">
         <!-- /.login-logo -->
         <div class="card card-outline card-primary">
-            <div class="card-header text-center"><a href="{{ url('/') }}" class="h1"><b>Admin</b>LTE</a></div>
+            <div class="card-header text-center"><a href="{{ url('/') }}" class="h1"><b>Fresh</b>Blooms</a></div>
             <div class="card-body">
-                <p class="login-box-msg">Sign in to start your session</p>
+                <p class="login-box-msg">Sign in to start</p>
                 <form action="{{ url('login') }}" method="POST" id="form-login">
                     @csrf
                     <div class="input-group mb-3">

@@ -208,11 +208,17 @@ class UserController extends Controller
         }
     }
 
+    public function show_ajax(string $id)
+    {
+        $user = UserModel::find($id);
+
+        return view('user.show_ajax', ['user' => $user]);
+    }
     public function create_ajax()
     {
-        $level = LevelModel::select('level_id', 'level_nama')->get();
+        $user = LevelModel::select('user_id', 'user_nama')->get();
         return view('user.create_ajax')
-            ->with('level', $level);
+            ->with('user', $user);
     }
     public function store_ajax(Request $request) 
     {
@@ -222,7 +228,7 @@ class UserController extends Controller
             'nama' => 'required|string|max:100',
             'password' => 'required|min:6',
             'level_id' => 'required|integer',
-            'user_profile' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048' // validasi file gambar
+            'user_profile' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048' // validasi file gambar
         ]);
 
         // Siapkan data user yang akan disimpan
@@ -241,7 +247,7 @@ class UserController extends Controller
             $userData['user_profile'] = $fileName; // Simpan nama file di database
         }
 
-        // Simpan data user ke database
+        // Simpan data user ke databasesupplier
         UserModel::create($userData);
 
         return response()->json(['success' => 'Data user berhasil disimpan']);
@@ -253,41 +259,72 @@ class UserController extends Controller
         $level = LevelModel::select('level_id', 'level_nama')->get();
         return view('user.edit_ajax', ['user' => $user, 'level' => $level]);
     }
-    public function update_ajax(Request $request)
+    public function update_ajax(Request $request, $id)
     {
-        $request->validate([
-            'username' => 'required|string|min:3|unique:m_user,username,' . $request->id . ',user_id',
-            'nama' => 'required|string|max:100',
-            'password' => 'nullable|min:5',
-            'level_id' => 'required|integer',
-            'user_profile' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048' // validasi file gambar
-        ]);
+        // cek apakah request dari ajax
+        if ($request->ajax() || $request->wantsJson()) {
 
-        $user = UserModel::find($request->id);
-        $userData = [
-            'username' => $request->username,
-            'nama' => $request->nama,
-            'password' => $request->password ? bcrypt($request->password) : $user->password,
-            'level_id' => $request->level_id,
-        ];
-
-        // Jika ada file user_profile yang diupload
-        if ($request->hasFile('user_profile')) {
-            $file = $request->file('user_profile');
-            $fileName = time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads/profile_pics'), $fileName);
-
-            // Hapus foto profil lama jika ada
-            if ($user->user_profile) {
-                unlink(public_path('uploads/profile_pics/' . $user->user_profile));
+            $rules = [
+                'level_id' => 'required|integer',
+                'username' => 'required|max:20|unique:m_user,username,' . $id . ',user_id',
+                'nama' => 'required|max:100',
+                'password' => 'nullable|min:6|max:20',
+                'user_profile'      => 'nullable|mimes:jpeg,png,jpg|max:4096'
+            ];
+            // use Illuminate\Support\Facades\Validator;
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false, // respon json, true: berhasil, false: gagal
+                    'message' => 'Validasi gagal.',
+                    'msgField' => $validator->errors() // menunjukkan field mana yang error
+                ]);
             }
+            $check = UserModel::find($id);
+            if ($check) {
+                if (!$request->filled('password')) { // jika password tidak diisi, maka hapus dari request
+                    $request->request->remove('password');
+                }
+                if ($request->hasFile('user_profile')) {
+                    $file = $request->file('user_profile');
+                    $extension = $file->getClientOriginalExtension();
 
-            $userData['user_profile'] = $fileName;
+                    $filename = time() . '.' . $extension;
+
+                    $path = public_path('image/profile/');
+                    $file->move($path, $filename);
+                    $check->user_profile = $path . $filename;
+                }
+                // $fileName = time() . $request->file('user_profile')->getClientOriginalExtension();
+                
+                // $path = $request->file(key: 'user_profile')->storeAs('image/', $fileName);
+                // $request['user_profile'] = '/storage/' . $path;
+
+                // $pathFile = ;
+
+                if (!$request->filled('user_profile')) { // jika password tidak diisi, maka hapus dari request 
+                    $request->request->remove('user_profile');
+                }
+
+                $check->update([
+                    'username'  => $request->username,
+                    'nama'      => $request->nama,
+                    'password'  => $request->password ? bcrypt($request->password) : UserModel::find($id)->password,
+                    'level_id'  => $request->level_id
+                    // 'user_profile' => $path . $filename
+                ]);
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Data berhasil diupdate'
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Data tidak ditemukan'
+                ]);
+            }
         }
-
-        $user->update($userData);
-
-        return response()->json(['success' => 'Data user berhasil diubah']);
+        return redirect('/user');
     }
 
     
@@ -316,7 +353,7 @@ class UserController extends Controller
             }
         }
     
-        return redirect('/');
+        return redirect('/user');
     }
     public function import()
     {
