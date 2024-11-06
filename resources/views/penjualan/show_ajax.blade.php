@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Kesalahan</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                <button type="button" class="close" data-dismiss="modal" aria label="Close"><span
                         aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
@@ -19,36 +19,63 @@
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Detail Data Kategori</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                <h5 class="modal-title" id="exampleModalLabel">Detail data penjualan</h5>
+                <button type="button" class="close" data-dismiss="modal" aria label="Close"><span
                         aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
-                <table class="table table-sm table-bordered table-striped">
+                <table class="table table-bordered table-striped table-hover table-sm">
                     <tr>
-                        <th class="text-right col-3">Nama Barang</th>
-                        <td class="col-9">{{ $penjualan->barang->barang_nama }}</td>
+                        <th>ID</th>
+                        <td>{{ $penjualan->penjualan_id }}</td>
                     </tr>
                     <tr>
-                        <th class="text-right col-3">Supplier </th>
-                        <td class="col-9">{{ $penjualan->supplier->supplier_nama }}</td>
+                        <th>User</th>
+                        <td>{{ $penjualan->user->nama }}</td>
                     </tr>
                     <tr>
-                        <th class="text-right col-3">User</th>
-                        <td class="col-9">{{ $penjualan->user->nama }}</td>
+                        <th>Penjualan kode</th>
+                        <td>{{ $penjualan->penjualan_kode }}</td>
                     </tr>
                     <tr>
-                        <th class="text-right col-3">User</th>
-                        <td class="col-9">{{ $penjualan->stok_jumlah }}</td>
+                        <th>Penjualan tanggal</th>
+                        <td>{{ $penjualan->penjualan_tanggal->format('Y-m-d') }}</td>
                     </tr>
-                    <tr>
-                        <th class="text-right col-3">User</th>
-                        <td class="col-9">{{ $penjualan->stok_tanggal }}</td>
-                    </tr>
-                    </table>
+                </table>
+
+                <div class="card" style="position: relative; left: 0px; top: 0px;">
+                    <div class="card-header ui-sortable-handle" style="cursor: move;">
+                        <h3 class="card-title">
+                            <i class="ion ion-clipboard mr-1"></i>
+                            Detail penjualan
+                        </h3>
+                    </div>
+
+                    <div class="card-body">
+                        <ul class="todo-list ui-sortable" data-widget="todo-list">
+                            @foreach ($penjualan->penjualanDetail as $detail)
+                                <li id="detail-{{ $detail->detail_id }}">
+                                    <span class="text">{{ $detail->barang->barang_nama }}</span>
+
+                                    <small class="badge badge-secondary" style="background-color: #FF9800;">
+                                        Jumlah {{ $detail->jumlah }}
+                                    </small>
+
+                                    <small class="badge badge-success" style="background-color: #205989;">
+                                        Harga {{ number_format($detail->harga) }}
+                                    </small>
+                                    @if ($detail->barang->image)
+                                        <img id="profile-picture" src="{{ $detail->barang->image }}" alt="Barang picture"
+                                            class="brand-image img-circle">
+                                    @endif
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-default">Kembali</button>
+                <button type="button" data-dismiss="modal" class="btn btn-warning">Kembali</button>
             </div>
         </div>
     </div>
