@@ -32,13 +32,14 @@ class LevelController extends Controller
     }
     public function list(Request $request)
     {
-        $level = LevelModel::select('level_id', 'level_kode', 'level_nama');
-        return DataTables::of($level)
-            ->addIndexColumn() // menambahkan kolom index / no urut (default nama kolom: DT_RowIndex) 
-            ->addColumn('aksi', function ($level) { // menambahkan kolom aksi
-                $btn = '<button onclick="modalAction(\''.url('/level/' . $level->level_id. '/show_ajax').'\')" class="btn btn-info btn-sm">Detail</button> ';
-                $btn .= '<button onclick="modalAction(\'' . url('/level/' . $level->level_id . '/edit_ajax') . '\')" class="btn btn-warning btn-sm">Edit</button> ';
-                $btn .= '<button onclick="modalAction(\'' . url('/level/' . $level->level_id . '/delete_ajax') . '\')" class="btn btn-danger btn-sm">Hapus</button> ';
+        $levels = LevelModel::select('level_id', 'level_kode', 'level_nama');
+
+        return DataTables::of($levels)
+            ->addIndexColumn() // Menambahkan kolom index / no urut (default nama kolom: DT_RowIndex)
+            ->addColumn('aksi', function ($level) { // Menambahkan kolom aksi
+                $btn = '<button onclick="modalAction(\''.url('/barang/' . $level->level_id. '/show_ajax').'\')" class="btn btn-info btn-sm">Detail</button> ';
+                $btn .= '<button onclick="modalAction(\''.url('/level/' . $level->level_id . '/edit_ajax').'\')" class="btn btn-warning btn-sm">Edit</button> ';
+                $btn .= '<button onclick="modalAction(\''.url('/level/' . $level->level_id . '/delete_ajax').'\')" class="btn btn-danger btn-sm">Hapus</button> ';
                 return $btn;
             })
             ->rawColumns(['aksi']) // memberitahu bahwa kolom aksi adalah html

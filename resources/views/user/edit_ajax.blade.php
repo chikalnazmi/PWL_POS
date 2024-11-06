@@ -75,7 +75,7 @@ $(document).ready(function() {
             level_id: { required: true, number: true },
             username: { required: true, minlength: 3, maxlength: 20 },
             nama: { required: true, minlength: 3, maxlength: 100 },
-            user_profile: { extension: "png|jpeg|jpg"},
+            user_profile: { accept: "png.jpeg.jpg"}
             password: { minlength: 6, maxlength: 20 }
         },
         submitHandler: function (form) {

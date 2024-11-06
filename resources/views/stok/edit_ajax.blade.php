@@ -98,7 +98,6 @@ $(document).ready(function() {
             stok_tanggal: { required: true, date: true }
         },
         submitHandler: function(form) {
-        
             $.ajax({
                 url: form.action,
                 type: form.method,
