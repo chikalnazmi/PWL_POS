@@ -117,9 +117,18 @@ class BarangController extends Controller
     public function show(string $id)
     {
         $barang = BarangModel::with('kategori')->find($id);
-        $breadcrumb = (object) ['title' => 'Detail Barang', 'list' => ['Home', 'Barang', 'Detail']];
-        $page = (object) ['title' => 'Detail barang'];
+
+        $breadcrumb = (object) [
+            'title' => 'Detail Barang',
+            'list'  => ['Home', 'Barang', 'Detail']
+        ];
+
+        $page = (object) [
+            'title' => 'Detail barang'
+        ];
+
         $activeMenu = 'barang'; // set menu yang sedang aktif
+
         return view('barang.show', ['breadcrumb' => $breadcrumb, 'page' => $page, 'barang' => $barang, 'activeMenu' => $activeMenu]);
     }
 
@@ -188,12 +197,9 @@ class BarangController extends Controller
             return redirect('/barang')->with('error', 'Data barang gagal dihapus karena masih terdapat tabel lain yang terkait dengan data ini');
         }
     }
-    public function show_ajax(string $id)
-    {
-        $barang = BarangModel::with('kategori')->find($id);
+    
 
-        return view('barang.show_ajax', ['barang' => $barang]);
-    }
+    // 1. public function create_ajax()
     public function create_ajax()
     {
         $kategori = KategoriModel::select('kategori_id', 'kategori_nama')->get();
@@ -236,9 +242,9 @@ class BarangController extends Controller
     // 3. public function edit_ajax(string $id)
     public function edit_ajax(string $id)
     {
-    $barang = BarangModel::find($id);
-    $kategori = KategoriModel::select('kategori_id', 'kategori_nama')->get();
-    return view('barang.edit_ajax', ['barang' => $barang, 'kategori' => $kategori]);
+        $barang = BarangModel::find($id);
+        $kategori = KategoriModel::select('kategori_id', 'kategori_nama')->get();
+        return view('barang.edit_ajax', ['barang' => $barang, 'kategori' => $kategori]);
     }
 
     // 4. public function update_ajax(Request $request, $id)
